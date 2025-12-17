@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-dark: #05070a;
+  --color-cyber-blue: #00d2ff;
+  --color-cyber-purple: #9d50bb;
+}
+
+/* Forçar o fundo caso o theme demore a buildar */
+:root {
+  background-color: #05070a;
+  color: white;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #05070a;
+
+  html {
+  scroll-behavior: smooth;
+  /* Isso garante que qualquer link âncora (#id) deslize suavemente */
+}
+
+/* Compensação para a Navbar fixa não cobrir o título da seção */
+section {
+  scroll-margin-top: 100px; 
+}
+
+}
