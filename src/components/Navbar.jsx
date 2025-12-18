@@ -7,12 +7,22 @@ const Navbar = () => {
     purple: '#9d50bb',
   };
 
-  // Função para scroll suave manual (opcional, pois o CSS resolve 90%)
+  const menuItems = [
+    { label: 'Início', id: 'home' },
+    { label: 'Sobre Mim', id: 'about' },
+    { label: 'Habilidades', id: 'skills' },
+    { label: 'Projetos', id: 'services' },
+  ];
+
   const scrollToSection = (e, id) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (id === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -31,20 +41,46 @@ const Navbar = () => {
       zIndex: 1000,
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
-      {/* Logo com animação de entrada */}
+      {/* LOGO IGOR_OS COM AS CORES DA TELA PRINCIPAL */}
       <motion.div 
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         style={{ 
-          fontSize: '1.5rem', 
+          display: 'flex',
+          alignItems: 'center',
+          fontSize: '1.2rem', 
+          fontFamily: "'Fira Code', monospace", 
           fontWeight: 'bold', 
-          color: colors.blue,
-          letterSpacing: '2px' 
+          cursor: 'pointer',
+        }}
+        onClick={(e) => scrollToSection(e, 'home')}
+      >
+        <span style={{ color: colors.blue, marginRight: '5px', textShadow: `0 0 8px ${colors.blue}` }}>&gt;</span> 
+        
+        <span style={{ 
+          background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          filter: `drop-shadow(0 0 5px ${colors.blue})` // Efeito Neon
         }}>
-        IS
+          IGOR_OS
+        </span>
+
+        {/* Cursor piscante combinando com o azul neon */}
+        <motion.span
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
+          style={{ 
+            width: '10px', 
+            height: '1.2em', 
+            backgroundColor: colors.blue, 
+            marginLeft: '4px',
+            boxShadow: `0 0 10px ${colors.blue}`
+          }}
+        />
       </motion.div>
 
-      {/* Links do Menu Animados */}
+      {/* Links do Menu */}
       <div style={{ 
         display: 'flex', 
         gap: '30px', 
@@ -53,26 +89,28 @@ const Navbar = () => {
         fontWeight: '500',
         letterSpacing: '1px'
       }}>
-        {['home', 'about', 'skills', 'services'].map((item) => (
+        {menuItems.map((item) => (
           <motion.a
-            key={item}
-            href={`#${item}`}
-            onClick={(e) => scrollToSection(e, item)}
+            key={item.id}
+            href={`#${item.id}`}
+            onClick={(e) => scrollToSection(e, item.id)}
             whileHover={{ scale: 1.1, color: colors.blue }}
             whileTap={{ scale: 0.9 }}
             style={{ 
               color: 'white', 
               textDecoration: 'none', 
-              transition: 'color 0.3s ease' 
+              transition: 'color 0.3s ease',
+              cursor: 'pointer'
             }}
           >
-            {item === 'home' ? 'Home' : item === 'about' ? 'About Me' : item.charAt(0).toUpperCase() + item.slice(1)}
+            {item.label}
           </motion.a>
         ))}
       </div>
 
-      {/* Botão de Contato com efeito de pulsação */}
+      {/* Botão de Contato */}
       <motion.button 
+        onClick={(e) => scrollToSection(e, 'contact')}
         whileHover={{ scale: 1.05, boxShadow: `0 0 15px ${colors.blue}` }}
         whileTap={{ scale: 0.95 }}
         style={{
@@ -86,7 +124,7 @@ const Navbar = () => {
           fontSize: '0.8rem',
           textTransform: 'uppercase'
         }}>
-        Contact
+        Contato
       </motion.button>
     </nav>
   );

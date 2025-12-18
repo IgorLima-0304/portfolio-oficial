@@ -31,7 +31,7 @@ const Skills = () => {
         transition={{ duration: 1 }}
         style={{ fontSize: '2rem', marginBottom: '50px', textTransform: 'uppercase', letterSpacing: '4px' }}
       >
-        My <span style={{ color: colors.blue }}>Skills</span>
+        Minhas <span style={{ color: colors.blue }}>Habilidades</span>
       </motion.h2>
 
       <div style={{ 

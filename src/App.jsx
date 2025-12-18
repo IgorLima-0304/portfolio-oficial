@@ -1,64 +1,117 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import AboutMe from './components/AboutMe';
 import Skills from './components/Skills';
 import Services from './components/Services';
 import IntroScreen from './components/IntroScreen';
+import Contact from './components/Contact';
 import ChromeDinoGame from 'react-chrome-dino';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
-import Contact from './components/Contact';
+import { Canvas } from '@react-three/fiber';
+import FloatingCube from './components/FloatingCube';
 
 function App() {
-  // Configuração de Cores Neon
   const colors = {
     dark: '#05070a',
     blue: '#00d2ff',
     purple: '#9d50bb',
-    textGray: '#888888'
+    textGray: '#888888',
+    terminalGreen: '#00ff00' 
   };
 
-  // Estados do Sistema
   const [showIntro, setShowIntro] = useState(true);
   const [showDino, setShowDino] = useState(false);
   const [keys, setKeys] = useState('');
   const [displayedText, setDisplayedText] = useState("");
-  const fullText = "Software Developer";
+  
+  // 1. Mudança para áudio mais robusto: Instanciação direta
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    
+    // Criar o áudio aqui garante que o navegador aceite o 'play' 
+    // porque o clique veio do botão da IntroScreen
+    const startupSound = new Audio('/sounds/startup.mp3');
+    startupSound.volume = 0.4;
+    startupSound.play().catch(error => console.log("Erro ao tocar áudio:", error));
+  };
 
-  // 1. Lógica de digitação (Inicia após o BOOT da Intro)
   useEffect(() => {
     if (!showIntro) {
-      let i = 0;
-      const timer = setInterval(() => {
-        setDisplayedText(fullText.slice(0, i + 1));
-        i++;
-        if (i === fullText.length) clearInterval(timer);
-      }, 100);
-      return () => clearInterval(timer);
+      let currentPhraseIndex = 0;
+      let currentCharIndex = 0;
+      let isDeleting = false;
+      let typingSpeed = 100;
+
+      const type = () => {
+        const currentFullText = phrases[currentPhraseIndex];
+        
+        if (isDeleting) {
+          setDisplayedText(currentFullText.substring(0, currentCharIndex - 1));
+          currentCharIndex--;
+          typingSpeed = 50;
+        } else {
+          setDisplayedText(currentFullText.substring(0, currentCharIndex + 1));
+          currentCharIndex++;
+          typingSpeed = 100;
+        }
+
+        if (!isDeleting && currentCharIndex === currentFullText.length) {
+          isDeleting = true;
+          typingSpeed = 2000;
+        } else if (isDeleting && currentCharIndex === 0) {
+          isDeleting = false;
+          currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+          typingSpeed = 500;
+        }
+        setTimeout(type, typingSpeed);
+      };
+
+      const initialTimeout = setTimeout(type, 500);
+      return () => clearTimeout(initialTimeout);
     }
   }, [showIntro]);
 
-  // 2. Lógica do Easter Egg (Detecta a sequência "dino")
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (showDino) return; // Evita duplicar lógica se o jogo estiver aberto
+      if (showDino) return;
       const newKeys = (keys + e.key).toLowerCase().slice(-4);
       setKeys(newKeys);
-      if (newKeys === 'dino') {
-        setShowDino(true);
-      }
+      if (newKeys === 'dino') setShowDino(true);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [keys, showDino]);
 
+  const phrases = [
+    "Onde a precisão da Engenharia da Computação encontra a alma da narrativa autoral.",
+    "Transformando cenários irreais em realidade.",
+    "Interatividade que conecta.",
+    "Transcendendo o óbvio para libertar visões originais."
+  ];
+
   return (
     <AnimatePresence mode="wait">
+      {/* Camada Global de Scanlines */}
+      <motion.div
+        key="global-scanlines"
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: 0.4, 
+          background: showIntro 
+            ? `repeating-linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 1px, ${colors.terminalGreen}66 2px, ${colors.terminalGreen}66 3px)`
+            : `repeating-linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 1px, ${colors.blue}55 2px, ${colors.blue}55 3px)`
+        }}
+        transition={{ duration: 2 }}
+        style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          backgroundSize: '100% 4px', pointerEvents: 'none', zIndex: 10000
+        }}
+      />
+
       {showIntro ? (
-        // TELA DE INTRODUÇÃO (BOOT SYSTEM ESTILO PS2)
-        <IntroScreen key="intro" onComplete={() => setShowIntro(false)} />
+        <IntroScreen key="intro" onComplete={handleIntroComplete} />
       ) : (
-        // CONTEÚDO PRINCIPAL DO PORTFÓLIO
         <motion.div
           key="main-content"
           initial={{ opacity: 0 }}
@@ -69,181 +122,85 @@ function App() {
             color: 'white', 
             minHeight: '100vh', 
             fontFamily: '"Inter", sans-serif',
-            margin: 0,
-            padding: 0,
             overflowX: 'hidden'
           }}
         >
           <Navbar />
 
-          {/* SEÇÃO HERO / CABEÇALHO */}
           <header style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            minHeight: '100vh',
-            textAlign: 'center',
-            padding: '0 20px'
+            display: 'flex', flexDirection: 'column', alignItems: 'center', 
+            justifyContent: 'center', minHeight: '100vh', textAlign: 'center', padding: '0 20px'
           }}>
             <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              style={{ fontSize: '1.2rem', color: colors.textGray, letterSpacing: '5px', marginBottom: '10px', textTransform: 'uppercase' }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              style={{ color: colors.blue, letterSpacing: '8px', textTransform: 'uppercase', fontSize: '0.9rem', marginBottom: '20px' }}
             >
-              I'm a
+              Iniciando Transmissão
             </motion.p>
 
             <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 8vw, 6rem)', 
-              fontWeight: '900', 
-              lineHeight: '1.1', 
-              textTransform: 'uppercase',
-              margin: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
+              fontSize: 'clamp(2.5rem, 8vw, 5.5rem)', 
+              fontWeight: '900', lineHeight: '1.1', textTransform: 'uppercase', margin: 0
             }}>
-              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                Full Stack
-              </motion.div>
-
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '1.2em' }}>
-                <span style={{ 
-                  background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}>
-                  {displayedText}
-                </span>
-
-                {/* Cursor Animado Dinâmico */}
-                <motion.span
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                  style={{ 
-                    display: 'inline-block',
-                    width: '12px', 
-                    height: '0.8em', 
-                    backgroundColor: colors.blue, 
-                    marginLeft: '8px',
-                    boxShadow: `0 0 10px ${colors.blue}`,
-                    verticalAlign: 'middle'
-                  }}
-                />
-              </div>
+              BEM VINDO A
+             <span style={{ background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}> MEU MUNDO.</span>
             </h1>
 
-            <motion.button 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                marginTop: '40px',
-                padding: '15px 35px',
-                border: 'none',
-                borderRadius: '8px',
-                background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                boxShadow: `0 0 25px rgba(0, 210, 255, 0.3)`,
-                textTransform: 'uppercase'
-              }}
+            <div style={{ minHeight: '1.5em', marginTop: '30px', fontSize: '1.5rem', color: colors.textGray }}>
+              <span>{displayedText}</span>
+              <motion.span
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                style={{ 
+                  display: 'inline-block', width: '3px', height: '1em', 
+                  backgroundColor: colors.blue, marginLeft: '5px', verticalAlign: 'middle' 
+                }}
+              />
+            </div>
+
+            <motion.div 
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
+              style={{ marginTop: '60px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-              Previous Projects
-            </motion.button>
+              <span style={{ fontSize: '0.7rem', color: colors.blue, letterSpacing: '3px', textTransform: 'uppercase' }}>Explorar Jornada</span>
+              <div style={{ width: '1px', height: '40px', background: `linear-gradient(to bottom, ${colors.blue}, transparent)`, marginTop: '10px' }}></div>
+            </motion.div>
+
+            {/* CUBO 3D: Subiu de posição com margem negativa maior */}
+            <div style={{
+              width: '100%',
+              height: '350px',
+              marginTop: '0px', 
+              position: 'relative',
+              zIndex: 2,
+              cursor: 'grab' // Cursor de mão para indicar que é arrastável
+            }}>
+              <Canvas camera={{ position: [0, 0, 4], fov: 40 }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} color={colors.blue} intensity={2} />
+                <FloatingCube />
+              </Canvas>
+            </div>
           </header>
 
-          {/* COMPONENTES DE SEÇÃO */}
           <AboutMe />
           <Skills />
           <Services />
           <Contact />
-
-          {/* FOOTER COM REDES SOCIAIS */}
-          <footer style={{ 
-            padding: '60px 40px', 
-            textAlign: 'center', 
-            borderTop: '1px solid rgba(255,255,255,0.05)',
-            backgroundColor: colors.dark 
-          }}>
+          
+          {/* ... Footer e DinoGame ... */}
+          <footer style={{ padding: '60px 40px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '30px' }}>
-              <motion.a 
-                href="https://github.com/SEU_USUARIO" 
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, color: colors.blue }}
-                style={{ color: 'white', fontSize: '1.8rem', transition: '0.3s' }}
-              >
-                <FaGithub />
-              </motion.a>
-
-              <motion.a 
-                href="https://linkedin.com/in/SEU_USUARIO" 
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, color: colors.blue }}
-                style={{ color: 'white', fontSize: '1.8rem', transition: '0.3s' }}
-              >
-                <FaLinkedin />
-              </motion.a>
-
-              <motion.a 
-                href="https://instagram.com/SEU_USUARIO" 
-                target="_blank" rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, color: colors.blue }}
-                style={{ color: 'white', fontSize: '1.8rem', transition: '0.3s' }}
-              >
-                <FaInstagram />
-              </motion.a>
+              <motion.a href="https://github.com/seu-perfil" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaGithub /></motion.a>
+              <motion.a href="https://linkedin.com/in/seu-perfil" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaLinkedin /></motion.a>
+              <motion.a href="https://instagram.com/seu-perfil" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaInstagram /></motion.a>
             </div>
-            <p style={{ fontSize: '0.8rem', color: colors.textGray, margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              © 2025 Igor - Todos os direitos reservados.
-            </p>
+            <p style={{ fontSize: '0.8rem', color: colors.textGray }}>© 2025 UpixelStudios - Todos os direitos reservados.</p>
           </footer>
-
-          {/* MODAL DO JOGO DO DINOSSAURO (EASTER EGG) */}
-          <AnimatePresence>
-            {showDino && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                style={{
-                  position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-                  backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 99999,
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
-                }}
-              >
-                <div style={{ 
-                  background: '#fff', padding: '30px', borderRadius: '15px', 
-                  position: 'relative', width: '90%', maxWidth: '600px',
-                  boxShadow: `0 0 40px ${colors.blue}`
-                }}>
-                  <button 
-                    onClick={() => { setShowDino(false); setKeys(''); }}
-                    style={{ 
-                      position: 'absolute', top: '-45px', right: 0, background: 'none', 
-                      border: 'none', color: '#fff', fontSize: '1.2rem', cursor: 'pointer', fontWeight: 'bold' 
-                    }}
-                  >
-                    FECHAR [X]
-                  </button>
-                  <h2 style={{ color: '#000', textAlign: 'center', marginBottom: '20px', fontFamily: 'monospace' }}>
-                    DINO_MODE_ACTIVATED
-                  </h2>
-                  <ChromeDinoGame />
-                  <p style={{ color: '#666', fontSize: '0.8rem', textAlign: 'center', marginTop: '15px' }}>
-                    Aperte ESPAÇO para pular!
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
         </motion.div>
       )}
     </AnimatePresence>
