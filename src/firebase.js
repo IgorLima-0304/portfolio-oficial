@@ -1,7 +1,6 @@
-// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, CACHE_SIZE_UNLIMITED } from "firebase/firestore"; // Mudamos aqui
 
 const firebaseConfig = {
   apiKey: "AIzaSyABh0nqY_YJFBOAsKOAuVwYjm2soRVaEG4",
@@ -13,9 +12,11 @@ const firebaseConfig = {
   measurementId: "G-XK8JR4995Q"
 };
 
-// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 
-// CORREÇÃO AQUI: Garanta que as palavras 'export' estejam presentes
+// Configuração otimizada para evitar delay em redes locais/desenvolvimento
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true, // Força um método de conexão mais estável para desenvolvimento
+});
+
 export const auth = getAuth(app);
-export const db = getFirestore(app);
