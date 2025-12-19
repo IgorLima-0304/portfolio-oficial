@@ -267,7 +267,7 @@ const Dashboard = () => {
       </div>
 
       <footer style={styles.footer}>
-        <span>HP 100/100</span><span>VAULT-TEC OS V.3.0</span><span>RADS 0</span>
+        <span>HP 100/100</span><span>IGOR_OS V.1.0.0</span><span>RADS 0</span>
       </footer>
     </div>
   );

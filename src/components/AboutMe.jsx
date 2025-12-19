@@ -105,8 +105,13 @@ const AboutMe = () => {
 
           <span style={itemStyle}>
             <span style={titleBagagemStyle}>• Versatilidade:</span> 
-            Do front-end seguro às mecânicas de jogos, busco sempre a fronteira entre <strong>performance</strong> e <strong>proteção de dados</strong>.
+            Do front-end seguro às mecânicas de jogos, busco sempre a fronteira entre <strong>performance</strong> e <strong>criatividade</strong>.
           </span>
+
+          <span style={itemStyle}>
+            <span style={titleBagagemStyle}>• Idealizador</span> 
+            Criador do projeto <strong>UPIXEL STUDIOS</strong>
+          </span>          
         </div>
 
         {/* Botões com Neon */}
@@ -123,20 +128,8 @@ const AboutMe = () => {
               fontWeight: 'bold',
               cursor: 'pointer',
               boxShadow: `0 0 10px rgba(0, 210, 255, 0.5)`
-            }}>Contrate-me</motion.button>
+            }}>SAIBA MAIS</motion.button>
 
-          <motion.button 
-            whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.1)', boxShadow: `0 0 15px white` }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              padding: '12px 30px',
-              background: 'transparent',
-              color: 'white',
-              border: '1px solid white',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}>RESUME</motion.button>
         </div>
       </div>
     </section>

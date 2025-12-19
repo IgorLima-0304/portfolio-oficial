@@ -12,6 +12,7 @@ const Navbar = () => {
     { label: 'Sobre Mim', id: 'about' },
     { label: 'Habilidades', id: 'skills' },
     { label: 'Projetos', id: 'services' },
+    { label: 'Contato', id: 'contact' },
   ];
 
   const scrollToSection = (e, id) => {
@@ -31,8 +32,8 @@ const Navbar = () => {
       position: 'fixed',
       top: 0,
       width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
+      display: 'grid', // Mudamos para grid para controle absoluto das áreas
+      gridTemplateColumns: '1fr auto 1fr', // 3 colunas: Logo (flex), Menu (centro), Espaço (flex)
       alignItems: 'center',
       padding: '20px 50px',
       boxSizing: 'border-box',
@@ -41,7 +42,8 @@ const Navbar = () => {
       zIndex: 1000,
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
-      {/* LOGO IGOR_OS COM AS CORES DA TELA PRINCIPAL */}
+      
+      {/* 1. ÁREA DA LOGO (Alinhada à esquerda) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -52,42 +54,35 @@ const Navbar = () => {
           fontFamily: "'Fira Code', monospace", 
           fontWeight: 'bold', 
           cursor: 'pointer',
+          justifySelf: 'start' // Garante que a logo fique na ponta esquerda
         }}
         onClick={(e) => scrollToSection(e, 'home')}
       >
         <span style={{ color: colors.blue, marginRight: '5px', textShadow: `0 0 8px ${colors.blue}` }}>&gt;</span> 
-        
         <span style={{ 
           background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          filter: `drop-shadow(0 0 5px ${colors.blue})` // Efeito Neon
+          filter: `drop-shadow(0 0 5px ${colors.blue})`
         }}>
           IGOR_OS
         </span>
-
-        {/* Cursor piscante combinando com o azul neon */}
         <motion.span
           animate={{ opacity: [0, 1, 0] }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
-          style={{ 
-            width: '10px', 
-            height: '1.2em', 
-            backgroundColor: colors.blue, 
-            marginLeft: '4px',
-            boxShadow: `0 0 10px ${colors.blue}`
-          }}
+          style={{ width: '10px', height: '1.2em', backgroundColor: colors.blue, marginLeft: '4px', boxShadow: `0 0 10px ${colors.blue}` }}
         />
       </motion.div>
 
-      {/* Links do Menu */}
+      {/* 2. ÁREA DO MENU (Centralizada) */}
       <div style={{ 
         display: 'flex', 
-        gap: '30px', 
+        gap: '40px', 
         fontSize: '0.8rem', 
         textTransform: 'uppercase', 
         fontWeight: '500',
-        letterSpacing: '1px'
+        letterSpacing: '1px',
+        justifySelf: 'center' // Mágica do Grid: centraliza perfeitamente o bloco
       }}>
         {menuItems.map((item) => (
           <motion.a
@@ -108,24 +103,10 @@ const Navbar = () => {
         ))}
       </div>
 
-      {/* Botão de Contato */}
-      <motion.button 
-        onClick={(e) => scrollToSection(e, 'contact')}
-        whileHover={{ scale: 1.05, boxShadow: `0 0 15px ${colors.blue}` }}
-        whileTap={{ scale: 0.95 }}
-        style={{
-          background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
-          color: 'white',
-          border: 'none',
-          padding: '10px 25px',
-          borderRadius: '6px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          fontSize: '0.8rem',
-          textTransform: 'uppercase'
-        }}>
-        Contato
-      </motion.button>
+      {/* 3. ESPAÇO VAZIO (Para equilibrar o grid) */}
+      <div style={{ justifySelf: 'end', width: '150px' }}>
+        {/* Este div está vazio apenas para empurrar o menu para o centro real */}
+      </div>
     </nav>
   );
 };

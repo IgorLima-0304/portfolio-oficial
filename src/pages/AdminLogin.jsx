@@ -118,7 +118,7 @@ const AdminLogin = () => {
       </motion.div>
 
       <footer style={styles.footer}>
-        <span>VAULT-TEC OS V.2.5.0</span>
+        <span>IGOR_OS V.1.0.0</span>
         <span>STABLE_CONNECTION</span>
       </footer>
     </div>

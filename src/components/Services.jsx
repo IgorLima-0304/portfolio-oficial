@@ -76,7 +76,7 @@ const Services = () => {
     <section id="services" style={{ padding: '80px 20px', maxWidth: '1200px', margin: '0 auto' }}>
       <header style={{ textAlign: 'center', marginBottom: '80px' }}>
         <h2 style={{ fontSize: '2.5rem', letterSpacing: '8px', textTransform: 'uppercase', margin: 0 }}>
-          // SISTEMA_DE_PROJETOS
+          PROJETOS
         </h2>
         <div style={{ width: '80px', height: '4px', background: colors.blue, margin: '20px auto' }} />
       </header>
