@@ -32,8 +32,8 @@ const Navbar = () => {
       position: 'fixed',
       top: 0,
       width: '100%',
-      display: 'grid', // Mudamos para grid para controle absoluto das áreas
-      gridTemplateColumns: '1fr auto 1fr', // 3 colunas: Logo (flex), Menu (centro), Espaço (flex)
+      display: 'grid', // Grid para controle absoluto das áreas
+      gridTemplateColumns: '1fr auto 1fr', // Três colunas para centralização
       alignItems: 'center',
       padding: '20px 50px',
       boxSizing: 'border-box',
@@ -43,7 +43,7 @@ const Navbar = () => {
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
       
-      {/* 1. ÁREA DA LOGO (Alinhada à esquerda) */}
+      {/* 1. ÁREA DA LOGO (Esquerda) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -54,7 +54,7 @@ const Navbar = () => {
           fontFamily: "'Fira Code', monospace", 
           fontWeight: 'bold', 
           cursor: 'pointer',
-          justifySelf: 'start' // Garante que a logo fique na ponta esquerda
+          justifySelf: 'start' 
         }}
         onClick={(e) => scrollToSection(e, 'home')}
       >
@@ -67,14 +67,26 @@ const Navbar = () => {
         }}>
           IGOR_OS
         </span>
+
+        {/* CORREÇÃO DO ERRO 'steps(2)': Mudado para 'easeInOut' */}
         <motion.span
           animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
-          style={{ width: '10px', height: '1.2em', backgroundColor: colors.blue, marginLeft: '4px', boxShadow: `0 0 10px ${colors.blue}` }}
+          transition={{ 
+            duration: 0.8, 
+            repeat: Infinity, 
+            ease: "easeInOut" // Valor compatível que evita o erro de renderização
+          }}
+          style={{ 
+            width: '10px', 
+            height: '1.2em', 
+            backgroundColor: colors.blue, 
+            marginLeft: '4px', 
+            boxShadow: `0 0 10px ${colors.blue}` 
+          }}
         />
       </motion.div>
 
-      {/* 2. ÁREA DO MENU (Centralizada) */}
+      {/* 2. ÁREA DO MENU (Centro) */}
       <div style={{ 
         display: 'flex', 
         gap: '40px', 
@@ -82,7 +94,7 @@ const Navbar = () => {
         textTransform: 'uppercase', 
         fontWeight: '500',
         letterSpacing: '1px',
-        justifySelf: 'center' // Mágica do Grid: centraliza perfeitamente o bloco
+        justifySelf: 'center' 
       }}>
         {menuItems.map((item) => (
           <motion.a
@@ -103,9 +115,9 @@ const Navbar = () => {
         ))}
       </div>
 
-      {/* 3. ESPAÇO VAZIO (Para equilibrar o grid) */}
+      {/* 3. ESPAÇO PARA EQUILÍBRIO (Direita) */}
       <div style={{ justifySelf: 'end', width: '150px' }}>
-        {/* Este div está vazio apenas para empurrar o menu para o centro real */}
+        {/* Div vazio para manter o menu no centro geométrico */}
       </div>
     </nav>
   );
