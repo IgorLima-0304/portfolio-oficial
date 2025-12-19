@@ -6,7 +6,7 @@ import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 
-// Importação de Componentes
+// Componentes
 import Navbar from './components/Navbar';
 import AboutMe from './components/AboutMe';
 import Skills from './components/Skills';
@@ -18,7 +18,7 @@ import ChromeDinoGame from 'react-chrome-dino';
 import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 
-// --- FIREWALL DE ROTA ---
+// Firewall de rota - se algum malandro tentar se conectar direto no dashboard volta pra o login+captcha
 const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -42,14 +42,14 @@ const ProtectedRoute = ({ children }) => {
   return user ? children : <Navigate to="/admin" />;
 };
 
-// --- COMPONENTE DA HOME PRINCIPAL ---
+// Home
 const MainHome = ({ colors }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [displayedText, setDisplayedText] = useState("");
   const [showDino, setShowDino] = useState(false);
   const [keys, setKeys] = useState('');
 
-  // ESTADO PARA GEOLOCALIZAÇÃO
+  // Geolocalização
   const [networkData, setNetworkData] = useState({ city: "LOCALIZANDO...", org: "IDENTIFICANDO..." });
 
   const [integrityClicks, setIntegrityClicks] = useState(0);
@@ -196,7 +196,7 @@ const MainHome = ({ colors }) => {
 
             <h1 style={{ fontSize: 'clamp(2.0rem, 6vw, 4.5rem)', fontWeight: '900', lineHeight: '1.2', textTransform: 'uppercase', margin: 0 }}>
               BEM-VINDO, <br />
-              VIAJANTE DE{" "} {/* Este {" "} força o React a renderizar um espaço real */}
+              VIAJANTE DE{" "} 
               <span style={{
                 background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
                 WebkitBackgroundClip: 'text',
@@ -260,7 +260,7 @@ const MainHome = ({ colors }) => {
 
             <p style={{ fontSize: '0.8rem', color: colors.textGray }}>© 2025 UpixelStudios - Todos os direitos reservados.</p>
           </footer>
-          {/*Não sei como faz pra desduplicar essa  de dinossauro*/}
+          {/*Não sei como faz pra desduplicar esse dinossauro*/}
           <AnimatePresence>
             {showDino && (
               <motion.div
