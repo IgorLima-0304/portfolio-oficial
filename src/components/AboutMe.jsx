@@ -45,7 +45,7 @@ const AboutMe = () => {
         <div style={styles.neonFrame}></div>
         <div style={styles.photoWrapper}>
           <img 
-            src="/sua-foto-perfil.jpg" 
+            src="src/assets/canvas.png" 
             alt="Igor Lima" 
             style={styles.image}
           />
