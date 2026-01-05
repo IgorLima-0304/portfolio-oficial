@@ -1,5 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { 
+  FaUniversity, 
+  FaAward, 
+  FaTerminal 
+} from "react-icons/fa";
 
 const AboutMe = () => {
   const colors = {
@@ -7,133 +12,104 @@ const AboutMe = () => {
     purple: '#9d50bb',
   };
 
-  const itemStyle = {
-    marginBottom: '15px',
-    display: 'block'
+  // Estilo para o container de cada item da trajetória
+  const itemContainerStyle = {
+    marginBottom: '25px',
+    display: 'flex',
+    flexDirection: 'column', // Empilha o título e o texto alinhados
+    alignItems: 'flex-start',
+    gap: '5px'
   };
 
-  const titleBagagemStyle = {
+  const titleHeaderStyle = {
     color: colors.blue,
     fontWeight: 'bold',
-    marginRight: '5px'
+    fontFamily: 'monospace',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    fontSize: '1.05rem'
+  };
+
+  const descriptionStyle = {
+    color: '#ccc',
+    paddingLeft: '28px', // Alinha o texto exatamente abaixo do início do título (ajuste conforme o tamanho do ícone)
+    lineHeight: '1.6',
+    fontSize: '0.95rem'
   };
 
   return (
-    <section id="about" style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '80px',
-      padding: '100px 50px',
-      maxWidth: '1100px',
-      margin: '0 auto',
-      flexWrap: 'wrap'
-    }}>
-      
+    <section id="about" style={styles.section}>
       {/* Lado Esquerdo: Foto com Moldura Neon */}
-      <div style={{ position: 'relative' }}>
-        {/* Moldura com efeito Neon */}
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '20px',
-          width: '300px',
-          height: '350px',
-          border: `3px solid ${colors.blue}`,
-          zIndex: 1,
-          // Aqui está a mágica do Neon
-          boxShadow: `0 0 10px ${colors.blue}, 0 0 20px ${colors.blue} inset, 0 0 30px ${colors.blue}`
-        }}></div>
-
-        {/* Foto com Glow interno */}
-        <div style={{
-          position: 'relative',
-          width: '300px',
-          height: '350px',
-          backgroundColor: '#1a1a1a',
-          zIndex: 2,
-          overflow: 'hidden',
-          border: '1px solid rgba(255,255,255,0.1)',
-          // Brilho sutil na imagem também
-          boxShadow: `0 0 15px rgba(0, 210, 255, 0.3)`
-        }}>
+      <div style={styles.photoContainer}>
+        <div style={styles.neonFrame}></div>
+        <div style={styles.photoWrapper}>
           <img 
-            src="https://via.placeholder.com/300x350" 
-            alt="Sua Foto" 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            src="/sua-foto-perfil.jpg" 
+            alt="Igor Lima" 
+            style={styles.image}
           />
         </div>
       </div>
 
-      {/* Lado Direito: Texto */}
-      <div style={{ flex: 1, minWidth: '300px' }}>
-        <h2 style={{ 
-          fontSize: '2.5rem', 
-          fontWeight: 'bold', 
-          marginBottom: '20px',
-          textTransform: 'uppercase' 
-        }}>Sobre <span style={{ 
-          color: colors.blue,
-          textShadow: `0 0 10px ${colors.blue}` // Neon no título tbm
-        }}>Mim</span></h2>
+      {/* Lado Direito: Conteúdo e Biografia */}
+      <div style={styles.contentArea}>
+        <h2 style={styles.mainTitle}>
+          Sobre <span style={styles.highlight}>Mim</span>
+        </h2>
         
-        <div style={{ 
-          color: '#aaa', 
-          lineHeight: '1.7', 
-          fontSize: '1.05rem',
-          marginBottom: '30px',
-          textAlign: 'justify'
-        }}>
-          <p style={{ marginBottom: '20px', color: '#fff' }}>
-            Desenvolvedor apaixonado por criar experiências digitais onde a <strong>segurança</strong> e a <strong>interatividade</strong> se encontram. Com um pé no <strong>Desenvolvimento Web</strong> e outro em <strong>Game Dev</strong>, foco em construir aplicações robustas, escaláveis e, acima de tudo, seguras.
+        <div style={styles.bioText}>
+          <p style={styles.introParagraph}>
+            Desenvolvedor apaixonado por criar experiências onde a <strong>criatividade</strong> e a <strong>interatividade</strong> se encontram. 
+            Com formação voltada para a <strong>Engenharia de Computação</strong>, transito entre o desenvolvimento web e a criação de jogos.
           </p>
 
-          <strong style={{ color: '#fff', fontSize: '1.2rem', display: 'block', marginBottom: '15px' }}>
-            O que trago na bagagem:
-          </strong>
+          <strong style={styles.subHeader}>Trajetória Técnica:</strong>
 
-          <span style={itemStyle}>
-            <span style={titleBagagemStyle}>• Liderança Técnica:</span> 
-            Fui Diretor e Coordenador na <strong>CIMATEC Jr.</strong>, onde liderei a formação técnica de novos talentos.
-          </span>
+          {/* Item: Liderança CIMATEC */}
+          <div style={itemContainerStyle}>
+            <div style={titleHeaderStyle}><FaAward /> • Liderança CIMATEC Jr:</div> 
+            <div style={descriptionStyle}>
+              Atuei como Diretor de Marketing e Coordenador de Capacitações. Premiado como <strong>Trainee Destaque Qualidade</strong> além  de integrar o time de projetistas de desenvolvimento.
+            </div>
+          </div>
 
-          <span style={itemStyle}>
-            <span style={titleBagagemStyle}>• Excelência na Entrega:</span> 
-            Premiado como <strong>Trainee Destaque</strong>, reflexo do meu compromisso com a qualidade e o detalhismo em cada projeto.
-          </span>
+          {/* Item: Experiência Governamental */}
+          <div style={itemContainerStyle}>
+            <div style={titleHeaderStyle}><FaUniversity /> • GOV MGI:</div> 
+            <div style={descriptionStyle}>
+              Estagiário no <strong>Ministério da Gestão e da Inovação</strong>, otimizando o rendimento interno da equipe através de soluções customizadas.
+            </div>
+          </div>
 
-          <span style={itemStyle}>
-            <span style={titleBagagemStyle}>• Versatilidade:</span> 
-            Do front-end seguro às mecânicas de jogos, busco sempre a fronteira entre <strong>performance</strong> e <strong>criatividade</strong>.
-          </span>
-
-          <span style={itemStyle}>
-            <span style={titleBagagemStyle}>• Idealizador</span> 
-            Criador do projeto <strong>UPIXEL STUDIOS</strong>
-          </span>          
+          {/* Item: Projetos Autorais */}
+          <div style={itemContainerStyle}>
+            <div style={titleHeaderStyle}><FaTerminal /> • UPIXEL STUDIOS:</div> 
+            <div style={descriptionStyle}>
+              Meu projeto de criação de uma desenvolvedora de experiencias interativas em 3D/2D usando Unity como principal ferramenta.
+            </div>
+          </div>          
         </div>
 
-        {/* Botões com Neon */}
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <motion.button 
-            whileHover={{ scale: 1.05, boxShadow: `0 0 20px ${colors.blue}` }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              padding: '12px 30px',
-              background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              boxShadow: `0 0 10px rgba(0, 210, 255, 0.5)`
-            }}>SAIBA MAIS</motion.button>
-
-        </div>
       </div>
     </section>
   );
+};
+
+// Objeto de estilos consolidado para organização
+const styles = {
+  section: { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '80px', padding: '100px 50px', maxWidth: '1200px', margin: '0 auto', flexWrap: 'wrap' },
+  photoContainer: { position: 'relative' },
+  neonFrame: { position: 'absolute', top: '20px', left: '20px', width: '300px', height: '350px', border: `3px solid #00d2ff`, zIndex: 1, boxShadow: `0 0 10px #00d2ff, 0 0 20px #00d2ff inset, 0 0 30px #00d2ff` },
+  photoWrapper: { position: 'relative', width: '300px', height: '350px', backgroundColor: '#0a0a0a', zIndex: 2, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', boxShadow: `0 0 15px rgba(0, 210, 255, 0.3)` },
+  image: { width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 },
+  contentArea: { flex: 1, minWidth: '350px' },
+  mainTitle: { fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '25px', textTransform: 'uppercase', letterSpacing: '2px' },
+  highlight: { color: '#00d2ff', textShadow: `0 0 10px #00d2ff` },
+  bioText: { color: '#ccc', lineHeight: '1.8', fontSize: '1rem', marginBottom: '30px', textAlign: 'justify' },
+  introParagraph: { marginBottom: '25px', color: '#fff', borderLeft: `3px solid #00d2ff`, paddingLeft: '15px' },
+  subHeader: { color: '#fff', fontSize: '1.1rem', display: 'block', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '1px' },
+  ctaButton: { padding: '12px 35px', background: `linear-gradient(to right, #00d2ff, #9d50bb)`, color: 'white', border: 'none', borderRadius: '5px', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'monospace', boxShadow: `0 0 10px rgba(0, 210, 255, 0.4)` }
 };
 
 export default AboutMe;

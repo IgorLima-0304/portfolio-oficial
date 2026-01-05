@@ -6,6 +6,7 @@ import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 
+
 // Componentes
 import Navbar from './components/Navbar';
 import AboutMe from './components/AboutMe';
@@ -17,6 +18,9 @@ import FloatingCube from './components/FloatingCube';
 import ChromeDinoGame from 'react-chrome-dino';
 import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
+import Blog from './pages/Blog';
+import PostDetail from './pages/PostDetail';
+
 
 // Firewall de rota - se algum malandro tentar se conectar direto no dashboard volta pra o login+captcha
 const ProtectedRoute = ({ children }) => {
@@ -43,8 +47,14 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Home
+// Home
 const MainHome = ({ colors }) => {
-  const [showIntro, setShowIntro] = useState(true);
+  // ATUALIZAÇÃO: O estado inicial agora verifica se a intro já rodou nesta sessão
+  const [showIntro, setShowIntro] = useState(() => {
+    const introDone = sessionStorage.getItem('igor_os_intro_done');
+    return introDone !== 'true'; 
+  });
+
   const [displayedText, setDisplayedText] = useState("");
   const [showDino, setShowDino] = useState(false);
   const [keys, setKeys] = useState('');
@@ -63,7 +73,6 @@ const MainHome = ({ colors }) => {
 
   useEffect(() => {
     if (!showIntro) {
-
       fetch('http://ip-api.com/json/')
         .then(res => res.json())
         .then(data => {
@@ -78,7 +87,6 @@ const MainHome = ({ colors }) => {
         })
         .catch((err) => {
           console.warn("Erro de Rastreio:", err);
-
           setNetworkData({
             city: "SETOR_7",
             org: "VAULT-TEC_NETWORK"
@@ -87,8 +95,11 @@ const MainHome = ({ colors }) => {
     }
   }, [showIntro]);
 
+  // ATUALIZAÇÃO: Agora salvamos o estado da intro quando ela termina
   const handleIntroComplete = () => {
     setShowIntro(false);
+    sessionStorage.setItem('igor_os_intro_done', 'true'); // Bloqueia repetição na sessão atual
+    
     const startupSound = new Audio('/sounds/startup.mp3');
     startupSound.volume = 0.4;
     startupSound.play().catch(error => console.log("Áudio aguardando interação:", error));
@@ -295,8 +306,9 @@ function App() {
     terminalGreen: '#00ff00'
   };
 
-  return (
+return (
     <Router>
+      {/* Scanlines Globais */}
       <motion.div
         key="global-scanlines"
         animate={{
@@ -307,8 +319,13 @@ function App() {
       />
 
       <Routes>
+        {/* Rotas Públicas */}
         <Route path="/" element={<MainHome colors={colors} />} />
+        <Route path="/blog" element={<Blog colors={colors} />} />
+<Route path="/blog/:id" element={<PostDetail colors={colors} />} />
         <Route path="/admin" element={<AdminLogin />} />
+
+        {/* Rota Protegida do Dashboard */}
         <Route
           path="/admin/dashboard"
           element={
@@ -321,5 +338,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

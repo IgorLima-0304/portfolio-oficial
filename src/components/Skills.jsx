@@ -1,21 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-// Importando os novos ícones necessários
 import { FaReact, FaNodeJs, FaJs, FaUnity, FaShieldAlt, FaGitAlt, FaPython, FaMicrosoft } from "react-icons/fa";
-import { SiUnrealengine } from "react-icons/si"; // Ícone específico da Unreal
+import { SiUnrealengine } from "react-icons/si";
 
 const Skills = () => {
-  // Lista atualizada com Python, Unreal e Power Platform
+  // 1. Definição das Skills com Níveis de Proficiência (0 a 100)
   const mySkills = [
-    { name: "React", icon: <FaReact /> },
-    { name: "Node.js", icon: <FaNodeJs /> },
-    { name: "JavaScript", icon: <FaJs /> },
-    { name: "Python", icon: <FaPython /> },
-    { name: "Unreal Engine", icon: <SiUnrealengine /> },
-    { name: "Unity", icon: <FaUnity /> },
-    { name: "Power Platform", icon: <FaMicrosoft /> }, // Power Apps e Power Automate
-    { name: "CyberSecurity", icon: <FaShieldAlt /> },
-    { name: "Git", icon: <FaGitAlt /> }
+    { name: "React", icon: <FaReact />, level: 80 },
+    { name: "Python", icon: <FaPython />, level: 25 },
+    { name: "Unreal Engine", icon: <SiUnrealengine />, level: 10 },
+    { name: "Unity", icon: <FaUnity />, level: 20 },
+    { name: "Power Platform", icon: <FaMicrosoft />, level: 100 },
+    { name: "CyberSecurity", icon: <FaShieldAlt />, level: 20 },
+    { name: "Git", icon: <FaGitAlt />, level: 90 }
   ];
 
   const colors = {
@@ -45,33 +42,51 @@ const Skills = () => {
             key={index}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
-            viewport={{ amount: 0.3 }}
-            
+            viewport={{ once: true }}
             whileHover={{ 
-              scale: 1.08, 
-              color: colors.blue,
+              scale: 1.05, 
               borderColor: colors.blue,
-              boxShadow: `0 0 20px ${colors.blue}`
+              boxShadow: `0 0 15px ${colors.blue}44`
             }}
             style={{
+              position: 'relative', // Necessário para a barra de fundo
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
               padding: '12px 22px',
               border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: '50px',
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontWeight: 'bold',
               cursor: 'default',
               backgroundColor: 'rgba(255,255,255,0.02)',
-              transition: 'all 0.3s ease',
+              overflow: 'hidden', // Mantém o preenchimento dentro da borda
               color: 'white'
             }}
           >
-            <span style={{ fontSize: '1.4rem', display: 'flex' }}>{skill.icon}</span>
-            {skill.name}
+            {/* 2. BARRA DE PROFICIÊNCIA (Fundo Dinâmico) */}
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: `${skill.level}%` }}
+              transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                background: `linear-gradient(90deg, ${colors.blue}22, ${colors.purple}22)`,
+                zIndex: 0
+              }}
+            />
+
+            {/* 3. CONTEÚDO (Z-Index alto para ficar acima do fundo) */}
+            <span style={{ fontSize: '1.4rem', display: 'flex', zIndex: 1, position: 'relative' }}>
+              {skill.icon}
+            </span>
+            <span style={{ zIndex: 1, position: 'relative' }}>
+              {skill.name}
+            </span>
           </motion.div>
         ))}
       </div>
