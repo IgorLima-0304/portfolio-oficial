@@ -7,9 +7,15 @@
     
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self'; 
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://apis.google.com; 
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://apis.google.com https://www.gstatic.com; 
       worker-src 'self' blob:;
-      connect-src 'self' https://*.firebaseio.com https://*.googleapis.com http://ip-api.com https://cdn.jsdelivr.net; 
+      connect-src 'self' 
+        https://api.emailjs.com 
+        https://ipapi.co 
+        https://firestore.googleapis.com 
+        https://identitytoolkit.googleapis.com 
+        https://*.firebaseio.com 
+        https://cdn.jsdelivr.net; 
       img-src 'self' data: https://*;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com;
@@ -17,8 +23,8 @@
       frame-src 'self' https://*.firebaseapp.com;
     ">
 
-    <title>portfolio</title>
-    <script type="module" crossorigin src="/portfolio-oficial/assets/index-CDztJlKD.js"></script>
+    <title>Portfolio - Igor Lima</title>
+    <script type="module" crossorigin src="/portfolio-oficial/assets/index-BpZFdnoq.js"></script>
     <link rel="stylesheet" crossorigin href="/portfolio-oficial/assets/index-B2lehbjA.css">
   </head>
   <body>
