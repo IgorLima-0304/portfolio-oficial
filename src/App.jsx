@@ -6,7 +6,6 @@ import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 
-
 // Componentes
 import Navbar from './components/Navbar';
 import AboutMe from './components/AboutMe';
@@ -20,7 +19,6 @@ import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 import Blog from './pages/Blog';
 import PostDetail from './pages/PostDetail';
-
 
 // Firewall de rota - se algum malandro tentar se conectar direto no dashboard volta pra o login+captcha
 const ProtectedRoute = ({ children }) => {
@@ -47,7 +45,6 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Home
-// Home
 const MainHome = ({ colors }) => {
   // ATUALIZAÇÃO: O estado inicial agora verifica se a intro já rodou nesta sessão
   const [showIntro, setShowIntro] = useState(() => {
@@ -71,25 +68,25 @@ const MainHome = ({ colors }) => {
     "Transcendendo o óbvio para libertar visões originais."
   ];
 
-  useEffect(() => {
+useEffect(() => {
     if (!showIntro) {
-      fetch('http://ip-api.com/json/')
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'success') {
-            setNetworkData({
-              city: data.city.toUpperCase(),
-              org: data.isp.toUpperCase()
-            });
-          } else {
-            throw new Error("Falha na localização");
-          }
+      // Usando o Cloudflare para obter o país/cidade de forma mais simples e segura
+      fetch('https://ipapi.co/json/') 
+        .then(res => {
+          if(!res.ok) throw new Error();
+          return res.json();
         })
-        .catch((err) => {
-          console.warn("Erro de Rastreio:", err);
+        .then(data => {
           setNetworkData({
-            city: "SETOR_7",
-            org: "VAULT-TEC_NETWORK"
+            city: data.city ? data.city.toUpperCase() : "ACESSO_REMOTO",
+            org: data.org ? data.org.toUpperCase() : "TERMINAL_ESTÁVEL"
+          });
+        })
+        .catch(() => {
+          // Se falhar por bloqueio de segurança, usamos um fallback elegante
+          setNetworkData({
+            city: "USUÁRIO_OCULTO",
+            org: "CONEXÃO_ENCRIPTADA"
           });
         });
     }
@@ -207,13 +204,13 @@ const MainHome = ({ colors }) => {
 
             <h1 style={{ fontSize: 'clamp(2.0rem, 6vw, 4.5rem)', fontWeight: '900', lineHeight: '1.2', textTransform: 'uppercase', margin: 0 }}>
               BEM-VINDO, <br />
-              VIAJANTE DE{" "} 
-              <span style={{
+              {" "} 
+              <span style={{ 
                 background: `linear-gradient(to right, ${colors.blue}, ${colors.purple})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
-              }}>
-                {networkData.city}
+              }}> VIAJANTE
+                
               </span>
             </h1>
 
@@ -244,7 +241,7 @@ const MainHome = ({ colors }) => {
           <footer style={{ padding: '60px 40px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '30px' }}>
               <motion.a href="https://github.com/IgorLima-0304" target="_blank" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaGithub /></motion.a>
-              <motion.a href="https://linkedin.com/in/seu-perfil" target="_blank" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaLinkedin /></motion.a>
+              <motion.a href="https://www.linkedin.com/in/igor-lima-579981289/" target="_blank" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaLinkedin /></motion.a>
               <motion.a href="https://instagram.com/seu-perfil" target="_blank" whileHover={{ scale: 1.2, color: colors.blue }} style={{ color: 'white', fontSize: '1.8rem' }}><FaInstagram /></motion.a>
             </div>
 
@@ -271,7 +268,7 @@ const MainHome = ({ colors }) => {
 
             <p style={{ fontSize: '0.8rem', color: colors.textGray }}>© 2025 UpixelStudios - Todos os direitos reservados.</p>
           </footer>
-          {/*Não sei como faz pra desduplicar esse dinossauro*/}
+
           <AnimatePresence>
             {showDino && (
               <motion.div
@@ -306,8 +303,12 @@ function App() {
     terminalGreen: '#00ff00'
   };
 
-return (
-    <Router>
+  // Correção dinâmica para GitHub Pages vs Local
+  const isGithubPages = window.location.hostname.includes('github.io');
+  const basename = isGithubPages ? "/portfolio-oficial" : "";
+
+  return (
+    <Router basename={basename}>
       {/* Scanlines Globais */}
       <motion.div
         key="global-scanlines"
@@ -322,7 +323,7 @@ return (
         {/* Rotas Públicas */}
         <Route path="/" element={<MainHome colors={colors} />} />
         <Route path="/blog" element={<Blog colors={colors} />} />
-<Route path="/blog/:id" element={<PostDetail colors={colors} />} />
+        <Route path="/blog/:id" element={<PostDetail colors={colors} />} />
         <Route path="/admin" element={<AdminLogin />} />
 
         {/* Rota Protegida do Dashboard */}
@@ -334,6 +335,9 @@ return (
             </ProtectedRoute>
           }
         />
+        
+        {/* Wildcard: Previne tela preta em caminhos não encontrados */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

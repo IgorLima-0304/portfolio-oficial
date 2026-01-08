@@ -1,18 +1,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaJs, FaUnity, FaShieldAlt, FaGitAlt, FaPython, FaMicrosoft } from "react-icons/fa";
-import { SiUnrealengine } from "react-icons/si";
+import { 
+  FaReact, 
+  FaUnity, 
+  FaShieldAlt, 
+  FaGitAlt, 
+  FaPython, 
+  FaMicrosoft, 
+  FaLinux // Importado ícone do Linux
+} from "react-icons/fa";
+import { SiUnrealengine, SiBlender } from "react-icons/si";
 
 const Skills = () => {
-  // 1. Definição das Skills com Níveis de Proficiência (0 a 100)
+  // 1. Definição das Skills atualizada (Linux e Git em 100%)
   const mySkills = [
     { name: "React", icon: <FaReact />, level: 80 },
     { name: "Python", icon: <FaPython />, level: 25 },
     { name: "Unreal Engine", icon: <SiUnrealengine />, level: 10 },
     { name: "Unity", icon: <FaUnity />, level: 20 },
+    { name: "Blender", icon: <SiBlender />, level: 45 },
     { name: "Power Platform", icon: <FaMicrosoft />, level: 100 },
     { name: "CyberSecurity", icon: <FaShieldAlt />, level: 20 },
-    { name: "Git", icon: <FaGitAlt />, level: 90 }
+    { name: "Git", icon: <FaGitAlt />, level: 100 }, // Ajustado para 100%
+    { name: "Linux", icon: <FaLinux />, level: 100 }  // Adicionado com 100%
   ];
 
   const colors = {
@@ -50,7 +60,7 @@ const Skills = () => {
               boxShadow: `0 0 15px ${colors.blue}44`
             }}
             style={{
-              position: 'relative', // Necessário para a barra de fundo
+              position: 'relative',
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
@@ -61,11 +71,11 @@ const Skills = () => {
               fontWeight: 'bold',
               cursor: 'default',
               backgroundColor: 'rgba(255,255,255,0.02)',
-              overflow: 'hidden', // Mantém o preenchimento dentro da borda
+              overflow: 'hidden',
               color: 'white'
             }}
           >
-            {/* 2. BARRA DE PROFICIÊNCIA (Fundo Dinâmico) */}
+            {/* BARRA DE PROFICIÊNCIA */}
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: `${skill.level}%` }}
@@ -80,7 +90,7 @@ const Skills = () => {
               }}
             />
 
-            {/* 3. CONTEÚDO (Z-Index alto para ficar acima do fundo) */}
+            {/* CONTEÚDO */}
             <span style={{ fontSize: '1.4rem', display: 'flex', zIndex: 1, position: 'relative' }}>
               {skill.icon}
             </span>

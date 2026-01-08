@@ -5,6 +5,7 @@ import {
   FaAward, 
   FaTerminal 
 } from "react-icons/fa";
+import canvas from '../assets/canvas.png';
 
 const AboutMe = () => {
   const colors = {
@@ -45,7 +46,7 @@ const AboutMe = () => {
         <div style={styles.neonFrame}></div>
         <div style={styles.photoWrapper}>
           <img 
-            src="src/assets/canvas.png" 
+            src={canvas} 
             alt="Igor Lima" 
             style={styles.image}
           />

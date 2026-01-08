@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
+  const form = useRef();
+
   const colors = {
     blue: '#00d2ff',
     purple: '#9d50bb',
   };
+const sendEmail = (e) => {
+  e.preventDefault();
 
+  emailjs.sendForm(
+    'service_z2gndt1',   // Seu Service ID
+    'template_pbcaghh',  // Seu Template ID
+    form.current,        // A referência do seu formulário (ref={form})
+    'rDO0KAw5qATJB2OML'  // Sua Public Key
+  )
+  .then((result) => {
+    alert("Mensagem enviada com sucesso!");
+    form.current.reset();
+  }, (error) => {
+    // Se o erro persistir, use console.log(error) para ver o detalhe em vez de alert
+    console.log("Erro detalhado:", error);
+    alert("Falha no envio. Verifique o console.");
+  });
+};
   return (
     <section id="contact" style={{ padding: '100px 20px', maxWidth: '800px', margin: '0 auto' }}>
       <motion.div
@@ -19,30 +39,33 @@ const Contact = () => {
           Entre em <span style={{ color: colors.blue }}>Contato</span>
         </h2>
         <p style={{ color: '#888', marginTop: '10px' }}>
-          Fale comigo!
+          Fale Comigo!
         </p>
       </motion.div>
 
-      <motion.form 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        action="https://formspree.io/f/SEU_ID_AQUI" // Substitua pelo seu ID do Formspree
-        method="POST"
-        style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
-      >
+      {/* A referência 'ref={form}' é essencial para o EmailJS capturar os dados */}
+      <form ref={form} onSubmit={sendEmail} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
           <input 
-            type="text" name="name" placeholder="Seu Nome" required
+            type="text" 
+            name="from_name" // Use {{from_name}} no seu template EmailJS
+            placeholder="Seu Nome" 
+            required
             style={inputStyle}
           />
           <input 
-            type="email" name="email" placeholder="Seu E-mail" required
+            type="email" 
+            name="reply_to" // Use {{reply_to}} no seu template EmailJS
+            placeholder="Seu E-mail" 
+            required
             style={inputStyle}
           />
         </div>
         <textarea 
-          name="message" placeholder="Sua Mensagem ou História" rows="5" required
+          name="message" // Use {{message}} no seu template EmailJS
+          placeholder="Sua Mensagem ou História" 
+          rows="5" 
+          required
           style={inputStyle}
         ></textarea>
 
@@ -63,7 +86,7 @@ const Contact = () => {
         >
           Enviar Mensagem
         </motion.button>
-      </motion.form>
+      </form>
     </section>
   );
 };

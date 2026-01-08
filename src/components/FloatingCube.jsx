@@ -10,9 +10,10 @@ const FloatingCube = ({ onActive }) => {
   const handRotation = useRef({ x: 0, y: 0 });
   const cubeScale = useRef(1.5); // Referência para a escala (evita re-renders lentos)
 
-  useEffect(() => {
+useEffect(() => {
     const hands = new Hands({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+      // CORREÇÃO: Forçar a versão específica da CDN para evitar erros de arquivo não encontrado
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`,
     });
 
     hands.setOptions({
